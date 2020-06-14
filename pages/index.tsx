@@ -1,8 +1,8 @@
 import Head from "next/head";
-import Title from "xolvio-storybook-showcase/components/Title";
-import CenteredContentWrapper from "xolvio-storybook-showcase/helpers/CenteredContentWrapper";
-import Background from "xolvio-storybook-showcase/elements/Background";
-import Sections from "xolvio-storybook-showcase/components/Sections";
+import Title from "xolvio-storybook-showcase/build/components/Title";
+import CenteredContentWrapper from "xolvio-storybook-showcase/build/helpers/CenteredContentWrapper";
+import Background from "xolvio-storybook-showcase/build/elements/Background";
+import Sections from "xolvio-storybook-showcase/build/components/Sections";
 import { getContentFromContentful } from "../src/contentfulLibrary";
 import { useEffect, useState } from "react";
 
