@@ -6,7 +6,6 @@
     "dev": "next dev",
     "build": "next build && next export",
     "start": "next start",
-    "test": "jest",
     "migrations": "xolvio-contentful-migrations",
     "refreshEnvironment": "xolvio-contentful-env-refresh"
   },
