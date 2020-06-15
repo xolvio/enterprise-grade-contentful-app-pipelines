@@ -35,6 +35,7 @@ jobs:
         SOURCE_DIR: 'contentful'
         DEST_DIR: 'contentful/qa'
 
+
 #    - name: Sync Existing Prod env to QA
 #      run: npm run refreshEnvironment
 #      env:
