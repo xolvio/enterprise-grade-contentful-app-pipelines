@@ -22,8 +22,8 @@ jobs:
 
     - name: Prepare QA website directory structure
       run: |
-        mkdir -p ./contentful/qa
-        mv ./out/* ./contentful/qa/
+        mkdir contentful
+        mv ./out/* ./contentful/
 
     - uses: jakejarvis/s3-sync-action@master
       with:
@@ -33,6 +33,7 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         SOURCE_DIR: 'contentful'
+        DEST_DIR: 'contentful/qa'
 
 #    - name: Sync Existing Prod env to QA
 #      run: npm run refreshEnvironment
