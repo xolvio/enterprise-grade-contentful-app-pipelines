@@ -1,51 +1,55 @@
-import util from "util";
-import fs from "fs";
-import fse from "fs-extra";
-import getDirectories from "./getDirectories";
 import verifyPrerequisites from "./verifyPrerequisites";
 import { spawn } from "child_process";
 
-const readFile = util.promisify(fs.readFile);
-
 type MigrationsJson = {
   migrations: string[];
+  path: string;
 };
 
 export default async function runMigrations(migrationsJson: MigrationsJson) {
-  if (!process.env.CONTENTFUL_MANAGEMENT_API)
-    throw missingEnvError("CONTENTFUL_MANAGEMENT_API");
-  if (!process.env.CONTENTFUL_SPACE_ID)
-    throw missingEnvError("CONTENTFUL_SPACE_ID");
-  if (!process.env.CONTENTFUL_ENVIRONMENT_ID)
-    throw missingEnvError("CONTENTFUL_ENVIRONMENT_ID");
+  checkForMissingEnvVars([
+    "CONTENTFUL_MANAGEMENT_API",
+    "CONTENTFUL_SPACE_ID",
+    "CONTENTFUL_ENVIRONMENT_ID",
+  ]);
 
-  if (!migrationsJson || (migrationsJson && !migrationsJson.migrations))
+  if (!migrationsJson.hasOwnProperty("migrations"))
     throw new Error(
       'Invalid JSON or "migrations" key not found in migrations.json'
     );
+
+  if (!migrationsJson.hasOwnProperty("path"))
+    throw new Error('Invalid JSON or "path" key not found in migrations.json');
   const componentsToMigrate = getComponentsFromMigrationsFile(migrationsJson);
   console.log("MICHAL: componentsToMigrate", componentsToMigrate);
 
-  if (!componentsToMigrate || !componentsToMigrate.length)
+  if (!componentsToMigrate?.length)
     throw new Error("Did not find any components to migrate. Exiting...");
 
   await verifyPrerequisites();
-  await asyncMigrate(componentsToMigrate);
+  await asyncMigrate(componentsToMigrate, migrationsJson.path);
 }
+
+export const checkForMissingEnvVars = (environmentVarsToCheck: string[]) => {
+  for (const env of environmentVarsToCheck)
+    if (!process.env[env]) throw missingEnvError(env);
+};
 
 export const getComponentsFromMigrationsFile = ({
   migrations,
 }: MigrationsJson) => migrations;
+
+export const getPathToMigrationFiles = ({ path }: MigrationsJson) => path;
 
 export const missingEnvError = (missingEnv: string) =>
   new Error(
     `${missingEnv} environment variable is missing. Make sure it's defined before running the script`
   );
 
-async function asyncMigrate(componentsToMigrate: any[]) {
-  console.log("Grouping all of the migrations together");
-
-  //Will include only the components which actually have the migrations
+async function asyncMigrate(
+  componentsToMigrate: any[],
+  pathToMigrationScripts: string
+) {
   console.log(
     "Running migrations against following components:",
     componentsToMigrate.join(", ")
@@ -66,7 +70,7 @@ async function asyncMigrate(componentsToMigrate: any[]) {
         process.env.CONTENTFUL_ENVIRONMENT_ID,
       ],
       {
-        cwd: process.cwd(),
+        cwd: `${process.cwd()}/${pathToMigrationScripts}`,
         env: process.env,
       }
     );
@@ -78,7 +82,6 @@ async function asyncMigrate(componentsToMigrate: any[]) {
       console.log(stderr.toString());
     });
     migrate.on("error", (err: any) => {
-      console.log(`CWD: ${process.cwd()}`);
       console.log(err);
       resolve(false);
     });
@@ -87,6 +90,4 @@ async function asyncMigrate(componentsToMigrate: any[]) {
       resolve(code === 0);
     });
   });
-
-  await fse.remove(`${process.cwd()}/migrations`);
 }

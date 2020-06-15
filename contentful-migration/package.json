@@ -1,0 +1,29 @@
+{
+  "name": "xolvio-contentful-migration-runner",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "tsc && chmod +x ./bin/migrations_cli.js && chmod +x ./bin/refresh_env_cli.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "contentful-migrate": "^0.12.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.2",
+    "@types/node": "^13.13.5",
+    "@types/react": "^16.9.34",
+    "jest": "^26.0.1",
+    "prettier": "^2.0.5",
+    "testdouble": "^3.13.1",
+    "ts-jest": "^25.5.1",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.8.3"
+  },
+  "peerDependencies": {
+    "contentful-migrate": "^0.12.0"
+  },
+  "bin": {
+    "xolvio-contentful-migrations": "./bin/migrations_cli.js",
+    "xolvio-contentful-env-refresh": "./bin/refresh_env_cli.js"
+  }
+}

@@ -14,6 +14,6 @@
     "isolatedModules": true,
     "jsx": "preserve"
   },
-  "exclude": ["node_modules", "./src/contentful-migration"],
+  "exclude": ["node_modules", "../contentful-migration"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }

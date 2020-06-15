@@ -1,0 +1,37 @@
+name: Contentful QA Env Workflow
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build_test_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+
+    - name: Install, build and test
+      run: |
+        npm ci
+        npm run build
+        npm test
+
+#    - name: Sync Existing Prod env to QA
+#      run: npm run refreshEnvironment
+#      env:
+#        CONTENTFUL_MANAGEMENT_API: ${{ secrets.CONTENTFUL_MANAGEMENT_API }}
+#        CONTENTFUL_SPACE_ID: jscbjpd3290q
+#        CONTENTFUL_TARGET_ENVIRONMENT: qa
+#        CONTENTFUL_SOURCE_ENVIRONMENT: production
+#
+#    - name: Run contentful migrations against QA env
+#      run: npm run migrations
+#      env:
+#        CONTENTFUL_MANAGEMENT_API: ${{ secrets.CONTENTFUL_MANAGEMENT_API }}
+#        CONTENTFUL_SPACE_ID: jscbjpd3290q
+#        CONTENTFUL_ENVIRONMENT_ID: qa

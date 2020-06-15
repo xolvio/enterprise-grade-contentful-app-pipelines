@@ -1,0 +1,4 @@
+{
+  "migrations": ["Title", "Sections"],
+  "path": "node_modules/xolvio-storybook-showcase/build/components"
+}

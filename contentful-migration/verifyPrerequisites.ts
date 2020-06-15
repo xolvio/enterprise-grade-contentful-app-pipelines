@@ -1,35 +1,32 @@
-const contentful = require('contentful-management');
-const { spawn } = require('child_process');
+import * as contentful from "contentful-management";
+import { spawn } from "child_process";
 
 const verifyPrerequisites = async () => {
   const client = contentful.createClient({
     accessToken: process.env.CONTENTFUL_MANAGEMENT_API,
   });
-  console.log('Got client');
+  console.log("Got client");
   const space = await client.getSpace(process.env.CONTENTFUL_SPACE_ID);
-  console.log('Got space');
-  const environment = await space
-    .getEnvironment(process.env.CONTENTFUL_ENVIRONMENT_ID)
-    .catch((e: any) => {
-      console.log(e);
-    });
+  console.log("Got space");
+  const environment = await space.getEnvironment(
+    process.env.CONTENTFUL_ENVIRONMENT_ID
+  );
 
   const migrationContentType = await environment
-    .getContentType('migration')
+    .getContentType("migration")
     .catch(() => {});
   if (!migrationContentType) {
     console.log('"migration" content type missing, creating one...');
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       const migrate = spawn(
-        `${process.cwd()}/node_modules/.bin/node`,
+        `${process.cwd()}/node_modules/.bin/ctf-migrate`,
         [
-          `${process.cwd()}/node_modules/.bin/ctf-migrate`,
-          'init',
-          '-t',
+          "init",
+          "-t",
           process.env.CONTENTFUL_MANAGEMENT_API,
-          '-s',
+          "-s",
           process.env.CONTENTFUL_SPACE_ID,
-          '-e',
+          "-e",
           process.env.CONTENTFUL_ENVIRONMENT_ID,
         ],
         {
@@ -38,18 +35,17 @@ const verifyPrerequisites = async () => {
         }
       );
 
-      migrate.stdout.on('data', (stdout: string) => {
+      migrate.stdout.on("data", (stdout: string) => {
         console.log(stdout.toString());
       });
-      migrate.stderr.on('data', (stderr: string) => {
+      migrate.stderr.on("data", (stderr: string) => {
         console.log(stderr.toString());
       });
-      migrate.on('error', (err: any) => {
+      migrate.on("error", (err: any) => {
         console.log(`CWD: ${process.cwd()}`);
-        console.log(err);
-        resolve(false);
+        throw err;
       });
-      migrate.on('close', (code: number) => {
+      migrate.on("close", (code: number) => {
         console.log(
           `content-migration migration type creation exited with: ${code}`
         );
@@ -59,4 +55,4 @@ const verifyPrerequisites = async () => {
   }
 };
 
-module.exports = verifyPrerequisites;
+export default verifyPrerequisites;
