@@ -8,14 +8,14 @@ const ContentfulWidget = dynamic(() =>
 const GlobalStyle = createGlobalStyle`
  @font-face {
     font-family: "HK Grotesk";
-    src: url("/assets/fonts/HKGrotesk-Light.otf");
-    src: url("/assets/fonts/HKGrotesk-Light.otf") format("opentype");
+    src: url("${process.env.ASSETS_PREFIX}/assets/fonts/HKGrotesk-Light.otf");
+    src: url("${process.env.ASSETS_PREFIX}/assets/fonts/HKGrotesk-Light.otf") format("opentype");
 }
 @font-face {
     font-family: "HK Grotesk";
     font-weight: bold;
-    src: url("/assets/fonts/HKGrotesk-Bold.otf");
-    src: url("/assets/fonts/HKGrotesk-Bold.otf") format("opentype");
+    src: url("${process.env.ASSETS_PREFIX}/assets/fonts/HKGrotesk-Bold.otf");
+    src: url("${process.env.ASSETS_PREFIX}/assets/fonts/HKGrotesk-Bold.otf") format("opentype");
 }
 
 * {

@@ -19,6 +19,8 @@ jobs:
       run: |
         npm ci
         npm run build
+      env:
+        TARGET_ENV: qa
 
     - name: Prepare QA website directory structure
       run: |
