@@ -1,16 +1,14 @@
-import getComponentsForMigration, {
-  getComponentsFromMigrationsFile,
-  getPathToMigrationFiles,
-  missingEnvError,
-} from "../runMigrations";
+import getComponentsForMigration from "../runMigrations";
 
 import { spawn } from "child_process";
-import verifyPrerequisites from "../verifyPrerequisites";
+import createMigrationContentType from "../createMigrationContentType";
+import { missingEnvError } from "../helpers";
 
 jest.mock("child_process");
-jest.mock("../verifyPrerequisites");
+jest.mock("../createMigrationContentType");
+//jest.mock("../helpers/getCwd");
 
-import migrationsFile from "./migrations.json";
+const listOfMigrations = ["__tests__/TestComponent"];
 
 beforeEach(() => {
   process.env.CONTENTFUL_MANAGEMENT_API = "contentful-api-key";
@@ -27,7 +25,9 @@ beforeEach(() => {
     on: jest.fn((e, cb) => setTimeout(() => cb(0), 100)),
   });
 
-  verifyPrerequisites.mockResolvedValue(true);
+  createMigrationContentType.mockResolvedValue(true);
+  //getCwd.mockReturnValue('')
+  // console.log("MICHAL: getCwd()", getCwd());
 });
 
 afterEach(() => {
@@ -38,64 +38,50 @@ afterAll(() => {
   jest.restoreAllMocks();
 });
 
-test("Returns the list of all components to run migrations against", () => {
-  expect(getComponentsFromMigrationsFile(migrationsFile))
-    .toMatchInlineSnapshot(`
-    Array [
-      "Title",
-      "Sections",
-    ]
-  `);
+test("Throws error if provided empty list of migration paths", () => {
+  return getComponentsForMigration([]).catch((e) => {
+    expect(e).toEqual(new Error("Migration paths cannot be empty."));
+  });
 });
 
-test("Returns the path to the migration scripts", () => {
-  expect(getPathToMigrationFiles(migrationsFile)).toMatchInlineSnapshot(
-    `"node_modules/xolvio-storybook-showcase/build/components"`
-  );
-});
-test("Throws error if provided json does not have migrations key", () => {
-  return getComponentsForMigration({ path: "" }).catch((e) => {
-    expect(e).toEqual(
-      new Error('Invalid JSON or "migrations" key not found in migrations.json')
-    );
+test("Throws error if did not provide migration paths as function argument", () => {
+  return getComponentsForMigration().catch((e) => {
+    expect(e).toEqual(new Error("Migration paths need to be provided"));
   });
 });
-test("Throws error if provided json does not have path key", () => {
-  return getComponentsForMigration({ migrations: [] }).catch((e) => {
-    expect(e).toEqual(
-      new Error('Invalid JSON or "path" key not found in migrations.json')
-    );
+
+test("Runs migrations only for the paths which contain migration scripts", async () => {
+  const oneGoodOneBad = [...listOfMigrations, "this/path/doesnot/exist"];
+  await getComponentsForMigration(oneGoodOneBad);
+
+  listOfMigrations.forEach((migration, i) => {
+    expect(spawn.mock.calls[i][2].cwd).toMatch(migration);
   });
+
+  expect(spawn.mock.calls.length).toEqual(1);
 });
-test("Throws error if did not find any components to migrate", () => {
-  return getComponentsForMigration({ migrations: [], path: "" }).catch((e) => {
-    expect(e).toEqual(
-      new Error("Did not find any components to migrate. Exiting...")
-    );
-  });
-});
+
 test("Checks if spawn was called with proper arguments", async () => {
-  await getComponentsForMigration({
-    migrations: ["Title", "Sections"],
-    path: "node_modules/xolvio-storybook-showcase/build/components",
+  await getComponentsForMigration(listOfMigrations);
+
+  listOfMigrations.forEach((migration, i) => {
+    const migrationPathSplit = migration.split("/");
+    const contentTypeName = migrationPathSplit[migrationPathSplit.length - 1];
+    expect(spawn.mock.calls[i][0]).toMatch("/node_modules/.bin/ctf-migrate");
+    expect(spawn.mock.calls[i][1]).toEqual([
+      "up",
+      "-a",
+      "-t",
+      "contentful-api-key",
+      "-s",
+      "space-id",
+      "-e",
+      "environment-id",
+    ]);
+    expect(spawn.mock.calls[i][2].cwd).toMatch(migration);
   });
-  expect(spawn.mock.calls[0][0]).toMatch("/node_modules/.bin/ctf-migrate");
-  expect(spawn.mock.calls[0][1]).toEqual([
-    "up",
-    "-c",
-    "title",
-    "-c",
-    "sections",
-    "-t",
-    "contentful-api-key",
-    "-s",
-    "space-id",
-    "-e",
-    "environment-id",
-  ]);
-  expect(spawn.mock.calls[0][2].cwd).toMatch(
-    "/node_modules/xolvio-storybook-showcase/build/components"
-  );
+
+  expect(spawn.mock.calls.length).toEqual(listOfMigrations.length);
 });
 test.each([
   "CONTENTFUL_MANAGEMENT_API",
@@ -103,7 +89,7 @@ test.each([
   "CONTENTFUL_ENVIRONMENT_ID",
 ])("Throws error if %s environment variable not defined", (testEnv) => {
   delete process.env[testEnv];
-  return getComponentsForMigration({ migrations: [] }).catch((e) => {
+  return getComponentsForMigration(listOfMigrations).catch((e) => {
     expect(e).toEqual(missingEnvError(testEnv));
   });
 });

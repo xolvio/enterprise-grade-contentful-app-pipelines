@@ -1,7 +1,7 @@
 import * as contentful from "contentful-management";
 import { spawn } from "child_process";
 
-const verifyPrerequisites = async () => {
+const createMigrationContentType = async () => {
   const client = contentful.createClient({
     accessToken: process.env.CONTENTFUL_MANAGEMENT_API,
   });
@@ -55,4 +55,4 @@ const verifyPrerequisites = async () => {
   }
 };
 
-export default verifyPrerequisites;
+export default createMigrationContentType;

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Refreshes the QA environment on Contentful
 import * as contentful from "contentful-management";
-import { checkForMissingEnvVars } from "./runMigrations";
+import { checkForMissingEnvVars } from "./helpers";
 
 export const refresh_env_cli = async () => {
   checkForMissingEnvVars([
