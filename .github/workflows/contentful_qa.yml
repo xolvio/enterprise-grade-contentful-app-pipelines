@@ -15,10 +15,11 @@ jobs:
       with:
         node-version: '12.x'
 
-    - name: Install, build and test
-      run: |
-        npm ci
-        npm run build
+    - name: Install deps
+      run: npm ci
+
+    - name: Build and Export static files
+      run: npm run build
       env:
         TARGET_ENV: qa
 
