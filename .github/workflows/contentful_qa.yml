@@ -15,11 +15,6 @@ jobs:
       with:
         node-version: '12.x'
 
-    - name: Just checking
-      run: echo $TARGET_ENV
-      env:
-        TARGET_ENV: qa
-
     - name: Install deps
       run: npm ci
 
