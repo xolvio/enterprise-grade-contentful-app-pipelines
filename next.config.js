@@ -7,6 +7,8 @@ const assetPrefix = isProd
   ? "https://lab.xolv.io/contentful/qa"
   : "";
 
+console.log("TARGET_ENV: ", process.env.TARGET_ENV);
+
 module.exports = {
   // Use the CDN in production and localhost for development.
   assetPrefix,
