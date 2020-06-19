@@ -1,17 +1,17 @@
 import Head from "next/head";
-import Title from "xolvio-storybook-showcase/build/components/Title";
-import CenteredContentWrapper from "xolvio-storybook-showcase/build/helpers/CenteredContentWrapper";
-import Background from "xolvio-storybook-showcase/build/elements/Background";
-import Sections from "xolvio-storybook-showcase/build/components/Sections";
 import { getContentFromContentful } from "../src/contentfulLibrary";
 import { useEffect, useState } from "react";
+import CenteredContentWrapper from "../src/helpers/CenteredContentWrapper";
+import Background from "../src/elements/Background";
+import Title from "../src/components/Title/Title";
+import Sections from "../src/components/Sections/Sections";
 
 type PageData = {
   fields: {
     sections: {
       fields: {
         sections: {
-          fields: { description: string; heading: string; icon: string };
+          fields: { description: string; heading: string; icon: any };
         }[];
       };
     };
@@ -52,7 +52,7 @@ const Home: React.FC<{ contentId: string }> = ({ contentId }) => {
 
 export async function getStaticProps(context) {
   return {
-    props: { contentId: "3NSc2aQuip4TAQ7bEcVNh8" }, // will be passed to the page component as props
+    props: { contentId: "pageService" }, // will be passed to the page component as props
   };
 }
 

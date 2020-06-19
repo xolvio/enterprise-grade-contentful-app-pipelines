@@ -33,3 +33,4 @@ dist
 bin
 yalc.lock
 .yalc
+.env
