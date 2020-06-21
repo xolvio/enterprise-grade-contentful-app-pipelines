@@ -19,7 +19,7 @@ const handle = app.getRequestHandler();
     await runMigrations([
       "src/components/Title",
       "src/components/Sections",
-      "src/pages/index",
+      "src/components/ServicesPage",
     ]); // Accepts second argument for overriding env variables defined in .env
   }
 
