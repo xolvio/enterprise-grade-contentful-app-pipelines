@@ -1,1 +1,4 @@
-export { default } from "../components/ServicesPage/ServicesPage";
+export {
+  default,
+  getStaticProps,
+} from "../components/ServicesPage/ServicesPage";

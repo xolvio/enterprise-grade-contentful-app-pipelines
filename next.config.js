@@ -1,4 +1,4 @@
-const isProd = process.env.TARGET_ENV === "prod";
+const isProd = process.env.TARGET_ENV === "production";
 const isQA = process.env.TARGET_ENV === "qa";
 
 const assetPrefix = isProd
@@ -14,5 +14,6 @@ module.exports = {
   assetPrefix,
   env: {
     ASSETS_PREFIX: assetPrefix,
+    CONTENTFUL_ENVIRONMENT: process.env.TARGET_ENV || "qa",
   },
 };

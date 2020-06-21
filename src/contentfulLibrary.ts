@@ -1,11 +1,11 @@
 import { createClient } from "contentful";
 import * as Cookies from "js-cookie";
 
-const PREVIEW_ENV = "qa";
+const PREVIEW_ENV = process.env.CONTENTFUL_ENVIRONMENT;
 const PREVIEW_SPACE = "jscbjpd3290q";
 const PREVIEW_ACCESS_TOKEN = "_EkxyeOSKhKKpWRXPF19e5UksLOe6agMDBEGuZN2HDQ";
 
-const CDN_ENV = "qa";
+const CDN_ENV = process.env.CONTENTFUL_ENVIRONMENT;
 const CDN_SPACE = "jscbjpd3290q";
 const CDN_ACCESS_TOKEN = "U42di5LwS7O4PEXMkqXdp6-LduCwf_u4bTyAdCwp0P4";
 

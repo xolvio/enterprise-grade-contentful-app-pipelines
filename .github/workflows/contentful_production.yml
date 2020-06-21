@@ -28,7 +28,7 @@ jobs:
       - name: Build and Export static files
         run: npm run build
         env:
-          TARGET_ENV: prod
+          TARGET_ENV: production
 
       - name: Prepare Production website directory structure
         run: |
