@@ -1,4 +1,7 @@
-const { runMigrations } = require("@xolvio/contentful-migration");
+const {
+  runMigrations,
+  createEnvironmentFromSource,
+} = require("@xolvio/contentful-pipelines");
 require("dotenv").config();
 
 const { createServer } = require("http");
@@ -16,7 +19,7 @@ const handle = app.getRequestHandler();
     await runMigrations([
       "src/components/Title",
       "src/components/Sections",
-      "pages/index",
+      "src/pages/index",
     ]); // Accepts second argument for overriding env variables defined in .env
   }
 
@@ -31,5 +34,3 @@ const handle = app.getRequestHandler();
     console.log("> Ready on http://localhost:3000");
   });
 })();
-
-//migrations for the page, mocked data based on contentful types...

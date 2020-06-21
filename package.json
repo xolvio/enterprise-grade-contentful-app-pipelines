@@ -10,7 +10,7 @@
     "refreshEnvironment": "xolvio-contentful-create-environment"
   },
   "dependencies": {
-    "@xolvio/contentful-migration": "file:.yalc/@xolvio/contentful-migration",
+    "@xolvio/contentful-pipelines": "^0.1.1",
     "contentful": "^7.14.4",
     "dotenv": "^8.2.0",
     "js-cookie": "^2.2.1",

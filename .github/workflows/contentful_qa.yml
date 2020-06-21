@@ -2,7 +2,7 @@ name: Contentful QA Env Workflow
 
 on:
   push:
-    branches: [ master ]
+    branches: [ qa ]
 
 jobs:
   build_test_deploy:
@@ -17,6 +17,13 @@ jobs:
 
     - name: Install deps
       run: npm ci
+
+    - name: Run contentful migrations against QA env
+      run: npm run migrations
+      env:
+        CONTENTFUL_MANAGEMENT_API: ${{ secrets.CONTENTFUL_MANAGEMENT_API }}
+        CONTENTFUL_SPACE_ID: jscbjpd3290q
+        CONTENTFUL_ENVIRONMENT_ID: qa
 
     - name: Build and Export static files
       run: npm run build
@@ -46,9 +53,3 @@ jobs:
 #        CONTENTFUL_TARGET_ENVIRONMENT: qa
 #        CONTENTFUL_SOURCE_ENVIRONMENT: production
 #
-#    - name: Run contentful migrations against QA env
-#      run: npm run migrations
-#      env:
-#        CONTENTFUL_MANAGEMENT_API: ${{ secrets.CONTENTFUL_MANAGEMENT_API }}
-#        CONTENTFUL_SPACE_ID: jscbjpd3290q
-#        CONTENTFUL_ENVIRONMENT_ID: qa

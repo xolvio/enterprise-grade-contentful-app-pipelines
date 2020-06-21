@@ -1,10 +1,10 @@
 import Head from "next/head";
-import { getContentFromContentful } from "../src/contentfulLibrary";
+import { getContentFromContentful } from "../contentfulLibrary";
 import { useEffect, useState } from "react";
-import CenteredContentWrapper from "../src/helpers/CenteredContentWrapper";
-import Background from "../src/elements/Background";
-import Title from "../src/components/Title/Title";
-import Sections from "../src/components/Sections/Sections";
+import CenteredContentWrapper from "../helpers/CenteredContentWrapper";
+import Background from "../elements/Background";
+import Title from "../components/Title/Title";
+import Sections from "../components/Sections/Sections";
 
 type PageData = {
   fields: {

@@ -2,7 +2,7 @@ import { AppProps } from "next/app";
 import { createGlobalStyle } from "styled-components";
 import dynamic from "next/dynamic";
 const ContentfulWidget = dynamic(() =>
-  import("../src/components/ContentfulWidget")
+  import("../components/ContentfulWidget")
 );
 
 const GlobalStyle = createGlobalStyle`
