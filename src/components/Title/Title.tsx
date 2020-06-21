@@ -1,14 +1,13 @@
 import React from "react";
-import {Confetti7Rows} from "../../elements/Confetti7Rows";
-import {SectionHeader, Subheading} from "../../elements/typography";
+import { Confetti7Rows } from "../../elements/Confetti7Rows";
+import { SectionHeader, Subheading } from "../../elements/typography";
 import styled from "styled-components";
-import {device} from "../../helpers/device";
+import { device } from "../../helpers/device";
 
 interface TitleProps {
-    subheading: string;
-    title: string;
+  subheading: string;
+  title: string;
 }
-
 
 const ConfettiWrapper = styled.div`
   display: none;
@@ -20,19 +19,19 @@ const ConfettiWrapper = styled.div`
   }
 `;
 
-export const Title = ({subheading, title}: TitleProps) => (
-    <>
-        <ConfettiWrapper>
-            <Confetti7Rows/>
-        </ConfettiWrapper>
+export const Title = ({ subheading, title }: TitleProps) => (
+  <>
+    <ConfettiWrapper>
+      <Confetti7Rows />
+    </ConfettiWrapper>
 
-        <TitleWrapper>
-            <HeaderWrapper>
-                <Subheading>{subheading}</Subheading>
-                <SectionHeader style={{marginTop: 24}}>{title}</SectionHeader>
-            </HeaderWrapper>
-        </TitleWrapper>
-    </>
+    <TitleWrapper>
+      <HeaderWrapper>
+        <Subheading>{subheading}</Subheading>
+        <SectionHeader style={{ marginTop: 24 }}>{title}</SectionHeader>
+      </HeaderWrapper>
+    </TitleWrapper>
+  </>
 );
 
 export default Title;

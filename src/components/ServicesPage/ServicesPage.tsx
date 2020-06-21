@@ -15,7 +15,7 @@ type PageData = {
         }[];
       };
     };
-    title: { fields: { title: string; subheading: string } };
+    title: { fields: { heading: string; subheading: string } };
   };
 };
 
@@ -38,7 +38,7 @@ const ServicesPage: React.FC<{ contentId: string }> = ({ contentId }) => {
         <Background />
         <Title
           subheading={pageData.fields.title.fields.subheading}
-          title={pageData.fields.title.fields.title}
+          title={pageData.fields.title.fields.heading}
         />
         <Sections
           sections={pageData.fields.sections.fields.sections.map(
