@@ -43,7 +43,7 @@ export const getContentFromContentful = <T extends object>(
 
 // Called from clientside
 export const dummySSO = (login: string, password: string) => {
-  const coolOrNotCool = login.toLowerCase() === "tesla" && password === "ftw";
+  const coolOrNotCool = login.toLowerCase() === "xolvio" && password === "ftw";
   if (!coolOrNotCool) return false;
 
   Cookies.set("contentType", "preview");
