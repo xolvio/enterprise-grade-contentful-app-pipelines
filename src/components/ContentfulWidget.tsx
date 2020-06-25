@@ -178,12 +178,15 @@ const ContentfulWidget: React.FC<{
   );
   const formRef = useRef(null);
 
+  const getSiteRoot = () =>
+    window.location.pathname = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1)
+
   const onLogin = async (e: any) => {
     e.preventDefault();
 
     if (dummySSO(e.target.login.value, e.target.password.value)) {
       setIsLoggedIn(true);
-      window.location.pathname = "/";
+      window.location.pathname = getSiteRoot()
     } else {
       setWrongCredentials(true);
       formRef.current.login.value = "";
@@ -194,14 +197,14 @@ const ContentfulWidget: React.FC<{
   const onLogout = async (e) => {
     e.preventDefault();
     dummyLogout();
-    if (!isPreviewPage) window.location.pathname = "/";
+    if (!isPreviewPage) window.location.pathname = getSiteRoot();
     else window.location.reload();
   };
 
   const onContentTypeChange = (e: any) => {
     setcontentType(e.target.value);
     Cookies.set("contentType", e.target.value);
-    window.location.pathname = "/";
+    window.location.pathname = getSiteRoot();
   };
 
   return (
